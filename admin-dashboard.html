@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CivicConnect</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard">
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-city"></i>
+                <span>CivicConnect</span>
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="user-profile">
+                <div class="user-avatar admin">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="user-info">
+                    <h4>Administrator</h4>
+                    <span class="user-role">System Admin</span>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="#overview">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Overview</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#issues">
+                        <i class="fas fa-list"></i>
+                        <span>All Issues</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#users">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="main-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Admin Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search issues..." id="searchInput">
+                    </div>
+                    <button class="btn-icon" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <section class="content-section active" id="overviewSection">
+                <section class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalIssues">0</h3>
+                            <p>Total Issues</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingIssues">0</h3>
+                            <p>Pending Issues</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="resolvedIssues">0</h3>
+                            <p>Resolved Issues</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                    </div>
+                    <div class="activity-feed" id="activityFeed">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>System initialized</p>
+                                <span class="activity-time">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section class="content-section" id="issuesSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> Issues Management</h2>
+                    <div class="section-actions">
+                        <div class="filter-group">
+                            <select id="filterStatus">
+                                <option value="all">All Status</option>
+                                <option value="Reported">Reported</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                            <select id="filterCategory">
+                                <option value="all">All Categories</option>
+                                <option value="Pothole">Pothole</option>
+                                <option value="Garbage">Garbage</option>
+                                <option value="Streetlight">Streetlight</option>
+                                <option value="Vandalism">Vandalism</option>
+                                <option value="Water">Water Issue</option>
+                                <option value="Sewage">Sewage Problem</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <select id="filterUrgency">
+                                <option value="all">All Urgency</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary" id="clearFiltersBtn">
+                            <i class="fas fa-times"></i> Clear Filters
+                        </button>
+                    </div>
+                </div>
+
+                <div class="issues-container">
+                    <table class="issues-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Urgency</th>
+                                <th>Reporter</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="issuesTableBody">
+                        </tbody>
+                    </table>
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No issues found</h3>
+                        <p>Try adjusting your filters</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="content-section" id="usersSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> User Management</h2>
+                </div>
+                <div class="users-container" id="usersContainer">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                        </tbody>
+                    </table>
+                    <div class="empty-state">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>No users registered yet</h3>
+                        <p>This section will list all your registered community members.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- STATUS MODAL -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Issue Status</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Updating status for: <strong id="modalIssueTitle"></strong></p>
+                <div class="form-group">
+                    <label for="statusSelect">New Status:</label>
+                    <select id="statusSelect" class="status-dropdown">
+                        <option value="Reported">Reported</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="statusNotes">Admin Notes (Optional):</label>
+                    <textarea id="statusNotes" placeholder="Add any notes about this status change..." rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmStatusUpdate()">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN VIEW DETAILS MODAL -->
+    <div id="adminIssueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Issue Details</h3>
+                <button class="modal-close" onclick="closeAdminModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <h2 id="adminModalTitle"></h2>
+                <div id="adminModalImageContainer" style="display:none; margin:12px 0;">
+                    <img id="adminModalImage" style="max-width:100%; border-radius:8px;" />
+                </div>
+                <p id="adminModalCategory"></p>
+                <p id="adminModalLocation"></p>
+                <p id="adminModalUrgency"></p>
+                <p id="adminModalStatus"></p>
+                <h4>Description:</h4>
+                <p id="adminModalDescription"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <i class="notification-icon"></i>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+    <footer><p> Amit Maurya &copy; 2026</p></footer>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

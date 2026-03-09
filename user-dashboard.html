@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - CivicConnect</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-city"></i>
+                <span>CivicConnect</span>
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <h4 id="userName">User Name</h4>
+                    <span class="user-role">Community Member</span>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="#dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#report-issue">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Report Issue</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#my-issues">
+                        <i class="fas fa-list"></i>
+                        <span>My Reports</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="main-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Welcome to CivicConnect</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-menu">
+                    <span id="userGreeting">Hello, User!</span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <section class="content-section active" id="dashboardSection">
+                <section class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalReports">0</h3>
+                            <p>Total Reports</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingReports">0</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="resolvedReports">0</h3>
+                            <p>Resolved</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="responseRate">0%</h3>
+                            <p>Response Rate</p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section class="content-section" id="reportSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-plus-circle"></i> Report New Issue</h2>
+                    <p>Help us improve your community by reporting issues</p>
+                </div>
+                
+                <form class="issue-form" id="issueForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="title">
+                                <i class="fas fa-heading"></i> Issue Title *
+                            </label>
+                            <input type="text" id="title" name="title" placeholder="Brief description of the issue" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">
+                                <i class="fas fa-tag"></i> Category *
+                            </label>
+                            <select id="category" name="category" required>
+                                <option value="">Select category</option>
+                                <option value="Pothole">🕳️ Pothole</option>
+                                <option value="Garbage">🗑️ Garbage Dumping</option>
+                                <option value="Streetlight">💡 Broken Streetlight</option>
+                                <option value="Vandalism">🎨 Vandalism</option>
+                                <option value="Water">💧 Water Issue</option>
+                                <option value="Sewage">🚽 Sewage Problem</option>
+                                <option value="Other">❓ Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">
+                            <i class="fas fa-align-left"></i> Description *
+                        </label>
+                        <textarea id="description" name="description" placeholder="Please provide detailed information about the issue..." rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issueImage" class="file-input-label">
+                            <i class="fas fa-camera"></i> Add an Image
+                        </label>
+                        <input type="file" id="issueImage" name="issueImage" accept="image/*" class="custom-file-input">
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="location">
+                                <i class="fas fa-map-marker-alt"></i> Location *
+                            </label>
+                            <div class="location-input-group">
+                                <input type="text" id="location" name="location" placeholder="Street name, landmark, etc." required>
+                                <button type="button" id="detectLocationBtn" class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-crosshairs"></i> Detect
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="urgency">
+                                <i class="fas fa-exclamation-triangle"></i> Urgency Level
+                            </label>
+                            <select id="urgency" name="urgency">
+                                <option value="Low">Low Priority</option>
+                                <option value="Medium" selected>Medium Priority</option>
+                                <option value="High">High Priority</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Clear Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Submit Report
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="content-section" id="issuesSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> My Reported Issues</h2>
+                    <div class="section-actions">
+                        <div class="filter-group">
+                            <label for="userFilterStatus">Filter by Status:</label>
+                            <select id="userFilterStatus">
+                                <option value="all">All Status</option>
+                                <option value="Reported">Reported</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-sm" id="refreshIssues">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="issues-container" id="issuesContainer">
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No issues reported yet</h3>
+                        <p>Start by reporting your first community issue</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="issueDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Issue Details</h2>
+                <span class="close-btn" onclick="closeModal('issueDetailsModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <h3 id="modalTitle"></h3>
+                <div id="modalImageContainer" class="modal-image-container" style="display: none;">
+                    <img id="modalImage" src="" alt="Issue Image">
+                </div>
+                <p id="modalCategory" class="modal-meta"></p>
+                <p id="modalLocation" class="modal-meta"></p>
+                <p id="modalUrgency" class="modal-meta"></p>
+                <p id="modalStatus" class="modal-meta"></p>
+                <p id="modalDescription" class="modal-description"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <i class="notification-icon"></i>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+    <footer><p> Amit Maurya &copy; 2026</p></footer>
+
+    <script src="user-dashboard.js"></script>
+</body>
+</html>
